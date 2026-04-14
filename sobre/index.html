@@ -1,733 +1,162 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App Ideas — Dores Profissionais</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>André Oliveira — Sobre | Bitcoin Product Lab</title>
+    <link rel="stylesheet" href="../base.css">
+    <style>
+        .page-header {
+            padding: 140px var(--p-page) 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --border: #1e1e2e;
-    --accent: #e8ff47;
-    --accent2: #ff5e5b;
-    --accent3: #5effa3;
-    --accent4: #5eb8ff;
-    --text: #e8e8f0;
-    --muted: #6b6b80;
-    --card: #14141f;
-  }
+        .bio-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 var(--p-page) 120px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 60px;
+        }
 
-  html { scroll-behavior: smooth; }
+        .bio-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            line-height: 1.6;
+            color: var(--white);
+        }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    line-height: 1.6;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+        .bio-text p { margin-bottom: 32px; }
 
-  /* Grain overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
+        .sidebar-info {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
 
-  header {
-    padding: 60px 40px 40px;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-  }
+        .info-block h3 {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
 
-  header::after {
-    content: '';
-    position: absolute;
-    top: -80px;
-    right: -80px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(232,255,71,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
+        .info-list { list-style: none; font-size: 14px; color: var(--text-muted); }
+        .info-list li { margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; }
+        .info-list li::before { content: "·"; color: var(--accent); font-weight: bold; }
 
-  .tag {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    padding: 3px 10px;
-    display: inline-block;
-    margin-bottom: 20px;
-    border-radius: 2px;
-  }
+        .projects-grid {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding-top: 60px;
+        }
 
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(32px, 5vw, 64px);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 16px;
-  }
+        .project-card {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 12px;
+        }
 
-  h1 span {
-    color: var(--accent);
-  }
+        .project-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
 
-  .subtitle {
-    color: var(--muted);
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 16px;
-    max-width: 500px;
-  }
-
-  .stats-bar {
-    display: flex;
-    gap: 40px;
-    margin-top: 32px;
-    flex-wrap: wrap;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--accent);
-  }
-
-  .stat-label {
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-  }
-
-  /* Filter Nav */
-  .filter-nav {
-    display: flex;
-    gap: 8px;
-    padding: 20px 40px;
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    position: sticky;
-    top: 0;
-    background: rgba(10,10,15,0.95);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-  }
-
-  .filter-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    padding: 6px 14px;
-    cursor: pointer;
-    border-radius: 3px;
-    transition: all 0.2s;
-    letter-spacing: 0.05em;
-  }
-
-  .filter-btn:hover, .filter-btn.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(232,255,71,0.05);
-  }
-
-  /* Main grid */
-  .main {
-    display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 0;
-    min-height: calc(100vh - 200px);
-  }
-
-  /* Cards section */
-  .cards-section {
-    padding: 40px;
-    border-right: 1px solid var(--border);
-  }
-
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-  }
-
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 24px;
-    cursor: pointer;
-    transition: all 0.25s;
-    position: relative;
-    overflow: hidden;
-    animation: fadeIn 0.4s ease both;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--card-accent, var(--accent));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s;
-  }
-
-  .card:hover {
-    border-color: var(--card-accent, var(--accent));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  }
-
-  .card:hover::before {
-    transform: scaleX(1);
-  }
-
-  .card-icon {
-    font-size: 28px;
-    margin-bottom: 14px;
-    display: block;
-  }
-
-  .card-category {
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--card-accent, var(--accent));
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-
-  .card-pain {
-    font-family: 'Fraunces', serif;
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 10px;
-    color: var(--text);
-  }
-
-  .card-desc {
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 16px;
-  }
-
-  .card-app {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 12px;
-  }
-
-  .card-app-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--card-accent, var(--accent));
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .card-app-label::before {
-    content: '▶';
-    font-size: 7px;
-  }
-
-  .card-app-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-
-  .card-app-desc {
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.5;
-  }
-
-  .difficulty {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 14px;
-    font-size: 10px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  .dots {
-    display: flex; gap: 3px;
-  }
-
-  .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--border);
-  }
-
-  .dot.filled { background: var(--card-accent, var(--accent)); }
-
-  /* Sidebar */
-  .sidebar {
-    padding: 40px 24px;
-    position: sticky;
-    top: 60px;
-    height: fit-content;
-  }
-
-  .sidebar-block {
-    margin-bottom: 32px;
-  }
-
-  .sidebar-heading {
-    font-family: 'Syne', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .revenue-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(30,30,46,0.6);
-    font-size: 11px;
-  }
-
-  .revenue-label { color: var(--text); max-width: 160px; line-height: 1.4; }
-  .revenue-value {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    color: var(--accent3);
-    white-space: nowrap;
-  }
-
-  .stack-item {
-    padding: 8px 12px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    margin-bottom: 6px;
-    font-size: 11px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .stack-name { color: var(--text); }
-  .stack-use { color: var(--muted); font-size: 10px; }
-
-  .tip-box {
-    background: rgba(94,255,163,0.05);
-    border: 1px solid rgba(94,255,163,0.2);
-    border-radius: 6px;
-    padding: 16px;
-    font-size: 11px;
-    line-height: 1.7;
-    color: var(--text);
-  }
-
-  .tip-box strong {
-    color: var(--accent3);
-    display: block;
-    margin-bottom: 6px;
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-
-  /* Hidden cards */
-  .card.hidden { display: none; }
-
-  @media (max-width: 768px) {
-    header, .cards-section { padding: 24px 20px; }
-    .filter-nav { padding: 12px 20px; }
-    .main { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-  }
-</style>
+        @media (max-width: 900px) {
+            .bio-container { grid-template-columns: 1fr; }
+            .bio-text { font-size: 20px; }
+        }
+    </style>
 </head>
 <body>
-<div style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(10,10,15,0.92);backdrop-filter:blur(10px);border-bottom:1px solid #1a1d2e;padding:14px 40px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:11px;">
-  <a href="../" style="color:#f7931a;text-decoration:none;letter-spacing:0.15em;text-transform:uppercase;">← André₿ Lab</a>
-  <div style="display:flex;gap:24px;">
-    <a href="../bitlegacy/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">BitLegacy</a>
-    <a href="../sovereignfolio/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">SovereignFolio</a>
-    <a href="../btcfi/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">BTCFi</a>
-    <a href="../bizbtc/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">BizBTC</a>
-  </div>
-</div>
-<div style="height:52px"></div>
 
-<header>
-  <div class="tag">Market Research · App Ideas</div>
-  <h1>Dores Profissionais<br><span>→ Oportunidades</span></h1>
-  <p class="subtitle">As maiores frustrações de profissionais e os aplicativos que podem resolvê-las.</p>
-  <div class="stats-bar">
-    <div class="stat"><span class="stat-num" id="total-count">18</span><span class="stat-label">Ideias mapeadas</span></div>
-    <div class="stat"><span class="stat-num">6</span><span class="stat-label">Categorias</span></div>
-    <div class="stat"><span class="stat-num">$B</span><span class="stat-label">Mercado endereçável</span></div>
-  </div>
-</header>
+    <nav class="nav-container">
+        <a href="../index.html" class="nav-link" style="font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); text-transform: none; letter-spacing: 0;">André Oliveira</a>
+        <div style="display: flex; gap: 32px;">
+            <a href="../index.html#cases" class="nav-link">Análises</a>
+            <a href="../metodo/index.html" class="nav-link">O Método</a>
+            <a href="../sobre/index.html" class="nav-link active">Sobre</a>
+        </div>
+    </nav>
 
-<nav class="filter-nav">
-  <button class="filter-btn active" onclick="filter('all')">Todos</button>
-  <button class="filter-btn" onclick="filter('tempo')">⏱ Tempo</button>
-  <button class="filter-btn" onclick="filter('financeiro')">💰 Financeiro</button>
-  <button class="filter-btn" onclick="filter('comunicacao')">💬 Comunicação</button>
-  <button class="filter-btn" onclick="filter('conhecimento')">🧠 Conhecimento</button>
-  <button class="filter-btn" onclick="filter('operacional')">⚙️ Operacional</button>
-  <button class="filter-btn" onclick="filter('carreira')">🚀 Carreira</button>
-</nav>
+    <header class="page-header">
+        <div class="mono" style="margin-bottom: 16px; color: var(--accent);">Portfólio & Biografia</div>
+        <h1 style="font-size: 72px; margin-bottom: 24px;">André <br>Oliveira</h1>
+        <p class="mono" style="font-size: 13px; color: var(--text-muted);">Hamilton, Ontario, Canada</p>
+    </header>
 
-<div class="main">
-  <section class="cards-section">
-    <div class="section-title">Ideias de Aplicativos</div>
-    <div class="cards-grid" id="cards-grid">
-    </div>
-  </section>
+    <main class="bio-container">
+        <div class="bio-text">
+            <p>
+                Profissional de tecnologia, desenvolvedor e entusiasta da soberania digital. Combinando rigor analítico com foco em adoção real no ecossistema Bitcoin.
+            </p>
+            <p>
+                Com formação em Sistemas de Computação pelo <strong>Mohawk College (Canadá)</strong> e background em Ciências Militares pela <strong>AMAN (Brasil)</strong>, trago uma perspectiva única de estratégia e execução técnica para o desenvolvimento de produtos.
+            </p>
+            <p style="font-size: 18px; color: var(--text-muted); font-style: italic;">
+                "Este Lab nasce da necessidade de mapear onde as soluções de soberania (Bitcoin) encontram as dores reais do mercado profissional."
+            </p>
+        </div>
 
-  <aside class="sidebar">
-    <div class="sidebar-block">
-      <div class="sidebar-heading">Modelos de Receita</div>
-      <div class="revenue-item"><span class="revenue-label">SaaS mensal / anual</span><span class="revenue-value">$9–199/mês</span></div>
-      <div class="revenue-item"><span class="revenue-label">Freemium + upgrade</span><span class="revenue-value">2–5% conversão</span></div>
-      <div class="revenue-item"><span class="revenue-label">Por empresa (B2B)</span><span class="revenue-value">$500–5k/mês</span></div>
-      <div class="revenue-item"><span class="revenue-label">Marketplace (comissão)</span><span class="revenue-value">5–15%</span></div>
-      <div class="revenue-item"><span class="revenue-label">White-label / licença</span><span class="revenue-value">Customizado</span></div>
-    </div>
+        <aside class="sidebar-info">
+            <div class="info-block">
+                <h3>Formação</h3>
+                <ul class="info-list">
+                    <li>Sistemas de Computação<br><small>Mohawk College</small></li>
+                    <li>Bacharel em Ciências Militares<br><small>AMAN</small></li>
+                </ul>
+            </div>
+            
+            <div class="info-block">
+                <h3>Stack Técnica</h3>
+                <div class="mono" style="font-size: 11px; line-height: 1.8; color: var(--text-muted);">
+                    Node.js · Express · React · PostgreSQL · Firebase · Bitcoin (LNS/L1/L2)
+                </div>
+            </div>
 
-    <div class="sidebar-block">
-      <div class="sidebar-heading">Stack Sugerida (André)</div>
-      <div class="stack-item"><span class="stack-name">Node.js + Express</span><span class="stack-use">Backend REST</span></div>
-      <div class="stack-item"><span class="stack-name">PostgreSQL</span><span class="stack-use">Dados</span></div>
-      <div class="stack-item"><span class="stack-name">React / Next.js</span><span class="stack-use">Frontend</span></div>
-      <div class="stack-item"><span class="stack-name">Claude API</span><span class="stack-use">IA embutida</span></div>
-      <div class="stack-item"><span class="stack-name">Stripe</span><span class="stack-use">Pagamentos</span></div>
-    </div>
+            <div class="info-block">
+                <h3>Atuação Atual</h3>
+                <ul class="info-list">
+                    <li>IT Support @ Niagara Health</li>
+                    <li>Independent Product Researcher</li>
+                </ul>
+            </div>
+        </aside>
 
-    <div class="sidebar-block">
-      <div class="tip-box">
-        <strong>💡 Dica estratégica</strong>
-        Comece pelo nicho que você já conhece — FedEx/logística ou saúde (Niagara Health). Você tem contexto real das dores, o que é uma vantagem enorme sobre concorrentes que só pesquisam o mercado.
-      </div>
-    </div>
-  </aside>
-</div>
+        <section class="projects-grid">
+            <div class="info-block" style="grid-column: 1 / -1; margin-bottom: 32px;">
+                <h3>Outros Projetos</h3>
+            </div>
+            
+            <div class="project-card">
+                <h4>Tropical Delights</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">E-commerce premium de frutas brasileiras e produtos de nicho.</p>
+            </div>
 
-<script>
-const data = [
-  {
-    icon: '📅',
-    category: 'tempo',
-    categoryLabel: 'Gestão de Tempo',
-    pain: 'Reuniões que não terminam e ninguém sabe o que foi decidido',
-    desc: 'Profissionais perdem em média 4h/semana em reuniões sem ata, sem dono de tarefa, sem próximo passo claro.',
-    appName: 'MeetLog AI',
-    appDesc: 'Grava, transcreve e extrai automaticamente decisões, tarefas e responsáveis de cada reunião. Envia resumo por email.',
-    difficulty: 2,
-    accent: '#e8ff47'
-  },
-  {
-    icon: '🔁',
-    category: 'tempo',
-    categoryLabel: 'Gestão de Tempo',
-    pain: 'Tarefas repetitivas que roubam horas do dia produtivo',
-    desc: 'Preencher planilhas, enviar emails padrão, gerar relatórios — tarefas que ninguém gosta mas todos fazem.',
-    appName: 'RepeatZero',
-    appDesc: 'Automação sem código para tarefas repetitivas: define gatilhos, templates e ações. Integra com email, Drive e Notion.',
-    difficulty: 3,
-    accent: '#e8ff47'
-  },
-  {
-    icon: '💸',
-    category: 'financeiro',
-    categoryLabel: 'Financeiro',
-    pain: 'Freelancers que não sabem precificar seus serviços corretamente',
-    desc: 'A maioria cobra pelo feeling, sem considerar custos, margem, mercado e valor percebido pelo cliente.',
-    appName: 'PriceRight',
-    appDesc: 'Calculadora de precificação profissional com custo real, margem desejada, comparativo de mercado e simulador de proposta.',
-    difficulty: 2,
-    accent: '#ff5e5b'
-  },
-  {
-    icon: '🧾',
-    category: 'financeiro',
-    categoryLabel: 'Financeiro',
-    pain: 'Controle de despesas e reembolso manual, lento e sujeito a erro',
-    desc: 'Guardar nota fiscal, preencher formulário de reembolso, esperar aprovação — processo arcaico em muitas empresas.',
-    appName: 'ReembApp',
-    appDesc: 'Foto da nota → OCR extrai dados → envia para aprovação → integra com folha de pagamento. Zero papel.',
-    difficulty: 3,
-    accent: '#ff5e5b'
-  },
-  {
-    icon: '📊',
-    category: 'financeiro',
-    categoryLabel: 'Financeiro',
-    pain: 'Fluxo de caixa imprevisível para profissionais autônomos',
-    desc: 'Receita irregular, contas fixas mensais e zero visibilidade de quando o próximo pagamento entra.',
-    appName: 'FluxoPro',
-    appDesc: 'Dashboard de fluxo de caixa para autônomos: prevê recebimentos, alerta sobre vencimentos e sugere quando cobrar.',
-    difficulty: 2,
-    accent: '#ff5e5b'
-  },
-  {
-    icon: '📧',
-    category: 'comunicacao',
-    categoryLabel: 'Comunicação',
-    pain: 'Inbox infinito: emails demais, resposta de menos',
-    desc: 'Profissionais recebem 100+ emails/dia. Triagem, priorização e respostas consomem 2-3h do dia.',
-    appName: 'InboxZero AI',
-    appDesc: 'IA classifica emails por urgência, sugere rascunhos de resposta e arquiva automaticamente o que não precisa de ação.',
-    difficulty: 3,
-    accent: '#5eb8ff'
-  },
-  {
-    icon: '🌐',
-    category: 'comunicacao',
-    categoryLabel: 'Comunicação',
-    pain: 'Barreira de idioma em reuniões e documentos internacionais',
-    desc: 'Profissionais em empresas globais perdem contexto por barreiras no inglês ou na tradução de documentos técnicos.',
-    appName: 'BridgeTalk',
-    appDesc: 'Tradução em tempo real focada em jargão profissional (jurídico, médico, técnico). Glossário personalizado por área.',
-    difficulty: 3,
-    accent: '#5eb8ff'
-  },
-  {
-    icon: '📢',
-    category: 'comunicacao',
-    categoryLabel: 'Comunicação',
-    pain: 'Proposta comercial fraca que não converte clientes',
-    desc: 'Maioria das propostas são PDFs genéricos sem personalização, sem urgência, sem foco no problema do cliente.',
-    appName: 'PropostaPro',
-    appDesc: 'Gerador de propostas comerciais com IA: preenche dados do cliente, gera texto personalizado, exporta em PDF bonito.',
-    difficulty: 2,
-    accent: '#5eb8ff'
-  },
-  {
-    icon: '🧠',
-    category: 'conhecimento',
-    categoryLabel: 'Gestão do Conhecimento',
-    pain: 'Conhecimento da empresa mora na cabeça das pessoas, não em sistemas',
-    desc: 'Quando um funcionário sai, leva consigo processos, contatos e know-how que a empresa nunca documentou.',
-    appName: 'KnowBase',
-    appDesc: 'Wiki empresarial inteligente que organiza, taga e recomenda conteúdo automaticamente. Integra com Slack e Drive.',
-    difficulty: 3,
-    accent: '#5effa3'
-  },
-  {
-    icon: '📚',
-    category: 'conhecimento',
-    categoryLabel: 'Gestão do Conhecimento',
-    pain: 'Profissionais que não conseguem se atualizar pela falta de tempo',
-    desc: 'Cursos longos, artigos técnicos densos, podcasts de 1h — conteúdo de qualidade mas incompatível com a rotina.',
-    appName: 'MicroLearn',
-    appDesc: 'Microlearning de 5 minutos/dia personalizado por área profissional. Trilha adaptativa, quiz e certificado.',
-    difficulty: 3,
-    accent: '#5effa3'
-  },
-  {
-    icon: '🔍',
-    category: 'conhecimento',
-    categoryLabel: 'Gestão do Conhecimento',
-    pain: 'Pesquisa de mercado cara e demorada para pequenas empresas',
-    desc: 'PMEs precisam de dados competitivos mas não têm orçamento para consultorias ou ferramentas como Statista.',
-    appName: 'MarketPulse',
-    appDesc: 'Relatórios de mercado automatizados com IA: concorrentes, tendências, precificação do setor. Sob demanda.',
-    difficulty: 4,
-    accent: '#5effa3'
-  },
-  {
-    icon: '⚙️',
-    category: 'operacional',
-    categoryLabel: 'Operacional',
-    pain: 'Checklist de processos feito no papel ou no WhatsApp',
-    desc: 'Equipes operacionais usam papel, planilha ou grupo de WhatsApp para controle de tarefas — sem rastreabilidade.',
-    appName: 'OpsFlow',
-    appDesc: 'Checklists digitais com assinatura, foto, geolocalização e histórico. Offline-first. Dashboard para gestores.',
-    difficulty: 2,
-    accent: '#c084fc'
-  },
-  {
-    icon: '🚚',
-    category: 'operacional',
-    categoryLabel: 'Operacional',
-    pain: 'Roteirização manual de entregas que desperdiça tempo e combustível',
-    desc: 'Pequenas transportadoras e entregadores autônomos traçam rotas no Google Maps sem otimização real.',
-    appName: 'RotaFácil',
-    appDesc: 'Otimizador de rotas para até 50 paradas. Considera janelas de entrega, peso e tipo de veículo. Exporta para motorista.',
-    difficulty: 3,
-    accent: '#c084fc'
-  },
-  {
-    icon: '🏥',
-    category: 'operacional',
-    categoryLabel: 'Operacional',
-    pain: 'Agendamento de clientes caótico com muitos no-shows',
-    desc: 'Clínicas, salões, consultórios — agendamento por telefone ou WhatsApp sem confirmação automática gera buracos na agenda.',
-    appName: 'AgendaZero',
-    appDesc: 'Agendamento online + confirmação automática via WhatsApp + lista de espera inteligente. Reduz no-show em 60%.',
-    difficulty: 2,
-    accent: '#c084fc'
-  },
-  {
-    icon: '🚀',
-    category: 'carreira',
-    categoryLabel: 'Carreira',
-    pain: 'Currículo que não passa pelo filtro ATS das grandes empresas',
-    desc: 'Sistemas de triagem automática rejeitam currículos antes de um humano ver, por palavras-chave erradas ou formato.',
-    appName: 'CVPass',
-    appDesc: 'Analisa vaga + currículo e reescreve para maximizar score no ATS. Mostra palavras-chave faltantes e pontuação.',
-    difficulty: 2,
-    accent: '#fb923c'
-  },
-  {
-    icon: '🎯',
-    category: 'carreira',
-    categoryLabel: 'Carreira',
-    pain: 'Profissionais sem clareza sobre próximo passo na carreira',
-    desc: 'A maioria não tem plano de carreira estruturado — seguem o que aparece, não o que planejaram.',
-    appName: 'CareerMap',
-    appDesc: 'Mapeamento de carreira por área: define objetivo, identifica gaps de skill, sugere cursos e calcula timeline realista.',
-    difficulty: 3,
-    accent: '#fb923c'
-  },
-  {
-    icon: '💼',
-    category: 'carreira',
-    categoryLabel: 'Carreira',
-    pain: 'Dificuldade em construir e manter rede de contatos profissionais',
-    desc: 'Networking é essencial mas 80% dos profissionais fazem de forma reativa — só procuram quando precisam.',
-    appName: 'NetKeep',
-    appDesc: 'CRM pessoal de networking: lembra aniversários, últimos contatos, interesses. Sugere com quem reconectar e quando.',
-    difficulty: 2,
-    accent: '#fb923c'
-  },
-  {
-    icon: '📝',
-    category: 'carreira',
-    categoryLabel: 'Carreira',
-    pain: 'Preparação para entrevistas de emprego sem feedback real',
-    desc: 'Candidatos praticam sozinhos, sem saber se suas respostas são boas, muito longas ou pouco específicas.',
-    appName: 'InterviewAI',
-    appDesc: 'Simulador de entrevistas com IA: faz perguntas reais por área, avalia resposta STAR, dá feedback em tempo real.',
-    difficulty: 3,
-    accent: '#fb923c'
-  }
-];
+            <div class="project-card">
+                <h4>AMAN96</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Plataforma de rede e alumni para egressos militares.</p>
+            </div>
 
-const accentMap = {
-  tempo: '#e8ff47',
-  financeiro: '#ff5e5b',
-  comunicacao: '#5eb8ff',
-  conhecimento: '#5effa3',
-  operacional: '#c084fc',
-  carreira: '#fb923c'
-};
+            <div class="project-card">
+                <h4>ImmiGenius</h4>
+                <p style="font-size: 14px; color: var(--text-muted);">Inteligência aplicada ao processo de imigração para o Canadá.</p>
+            </div>
+        </section>
+    </main>
 
-function renderCards(filter = 'all') {
-  const grid = document.getElementById('cards-grid');
-  const filtered = filter === 'all' ? data : data.filter(d => d.category === filter);
-  document.getElementById('total-count').textContent = data.length;
+    <footer style="padding: 80px var(--p-page); border-top: 1px solid var(--border); text-align: center;">
+        <p style="color: var(--text-muted); font-size: 12px;">© 2026 Bitcoin Product Lab · André Oliveira</p>
+    </footer>
 
-  grid.innerHTML = filtered.map((d, i) => {
-    const dots = Array.from({length: 4}, (_, j) =>
-      `<div class="dot ${j < d.difficulty ? 'filled' : ''}"></div>`
-    ).join('');
-
-    return `
-    <div class="card" style="--card-accent: ${accentMap[d.category]}; animation-delay: ${i * 40}ms">
-      <span class="card-icon">${d.icon}</span>
-      <div class="card-category">${d.categoryLabel}</div>
-      <div class="card-pain">${d.pain}</div>
-      <div class="card-desc">${d.desc}</div>
-      <div class="card-app">
-        <div class="card-app-label">Solução proposta</div>
-        <div class="card-app-name">${d.appName}</div>
-        <div class="card-app-desc">${d.appDesc}</div>
-      </div>
-      <div class="difficulty">
-        <div class="dots">${dots}</div>
-        <span>Complexidade ${d.difficulty}/4</span>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function filter(cat) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  renderCards(cat);
-}
-
-renderCards();
-</script>
 </body>
 </html>

@@ -1,959 +1,221 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTCFi + Bitcoin para Negócios — Análise de Oportunidade</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #07080f;
-    --s1: #0c0e1a;
-    --s2: #111420;
-    --border: #171b2e;
-    --border2: #1f2440;
-    --btcfi: #a78bfa;   /* purple — BTCFi */
-    --btcfi2: #7c3aed;
-    --btcfi-dim: rgba(167,139,250,0.1);
-    --biz: #f59e0b;     /* amber — negócios */
-    --biz2: #d97706;
-    --biz-dim: rgba(245,158,11,0.1);
-    --green: #10b981;
-    --red: #f43f5e;
-    --blue: #3b82f6;
-    --text: #dde4f8;
-    --muted: #5c6280;
-    --muted2: #3a4060;
-  }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
-    line-height: 1.65;
-  }
-
-  /* top gradient split */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; height: 320px;
-    background: linear-gradient(135deg,
-      rgba(167,139,250,0.05) 0%,
-      transparent 50%,
-      rgba(245,158,11,0.05) 100%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  * { position: relative; z-index: 1; }
-
-  /* ── HERO ── */
-  .hero {
-    padding: 56px 52px 44px;
-    border-bottom: 1px solid var(--border);
-    text-align: center;
-  }
-
-  .hero-pills {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 22px;
-    flex-wrap: wrap;
-  }
-
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 100px;
-    border: 1px solid;
-  }
-
-  .pill.p { border-color: rgba(167,139,250,0.4); color: var(--btcfi); background: var(--btcfi-dim); }
-  .pill.a { border-color: rgba(245,158,11,0.4); color: var(--biz); background: var(--biz-dim); }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(34px, 4.5vw, 60px);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: 14px;
-    color: #eef2ff;
-  }
-
-  h1 .p { color: var(--btcfi); }
-  h1 .a { color: var(--biz); font-style: italic; }
-
-  .hero-sub {
-    font-size: 14px;
-    color: var(--muted);
-    max-width: 600px;
-    margin: 0 auto 32px;
-    line-height: 1.75;
-  }
-
-  .divider-line {
-    width: 60px; height: 1px;
-    background: linear-gradient(90deg, var(--btcfi), var(--biz));
-    margin: 0 auto;
-  }
-
-  /* ── TAB NAV ── */
-  .tab-nav {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    background: rgba(7,8,15,0.95);
-    backdrop-filter: blur(10px);
-    z-index: 50;
-  }
-
-  .tab-btn {
-    flex: 1;
-    padding: 16px 24px;
-    background: none;
-    border: none;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.25s;
-    border-bottom: 2px solid transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .tab-btn.p { color: var(--muted); }
-  .tab-btn.p.on { color: var(--btcfi); border-bottom-color: var(--btcfi); background: var(--btcfi-dim); }
-  .tab-btn.a { color: var(--muted); }
-  .tab-btn.a.on { color: var(--biz); border-bottom-color: var(--biz); background: var(--biz-dim); }
-
-  /* ── PANELS ── */
-  .panel { display: none; }
-  .panel.on { display: block; }
-
-  /* ── SECTION SHARED ── */
-  .sec {
-    padding: 40px 52px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sec-layout {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 40px;
-    align-items: start;
-  }
-
-  .sec-tag {
-    font-size: 9px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .sec-tag::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .p .sec-tag, .panel-p .sec-tag { color: var(--btcfi); }
-  .a .sec-tag, .panel-a .sec-tag { color: var(--biz); }
-
-  h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    font-weight: 600;
-    line-height: 1.25;
-    margin-bottom: 14px;
-    color: #eef2ff;
-  }
-
-  p { color: var(--muted); font-size: 13px; line-height: 1.8; margin-bottom: 12px; }
-  p:last-child { margin-bottom: 0; }
-  p strong { color: var(--text); font-weight: 500; }
-
-  /* ── SCORE CARD ── */
-  .score-card {
-    background: var(--s1);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 22px;
-  }
-
-  .sc-title {
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sc-row { margin-bottom: 13px; }
-  .sc-labels { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; }
-  .sc-name { color: var(--text); }
-  .sc-val { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
-  .panel-p .sc-val { color: var(--btcfi); }
-  .panel-a .sc-val { color: var(--biz); }
-
-  .sc-bar { height: 3px; background: var(--border2); border-radius: 2px; overflow: hidden; }
-  .sc-fill {
-    height: 100%;
-    border-radius: 2px;
-    animation: barIn 0.8s ease both;
-    animation-delay: 0.3s;
-    transform-origin: left;
-  }
-
-  @keyframes barIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-  .sc-verdict {
-    margin-top: 16px;
-    padding: 12px;
-    border-radius: 5px;
-    font-size: 11px;
-    line-height: 1.6;
-    text-align: center;
-  }
-
-  .panel-p .sc-verdict { background: var(--btcfi-dim); border: 1px solid rgba(167,139,250,0.2); color: var(--btcfi); }
-  .panel-a .sc-verdict { background: var(--biz-dim); border: 1px solid rgba(245,158,11,0.2); color: var(--biz); }
-
-  /* ── RISK TABLE ── */
-  .risk-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 14px;
-  }
-
-  .risk-box {
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    padding: 14px;
-  }
-
-  .risk-box.warn { border-left: 3px solid var(--red); }
-  .risk-box.ok { border-left: 3px solid var(--green); }
-  .risk-box.neutral { border-left: 3px solid var(--blue); }
-
-  .risk-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-
-  .risk-box.warn .risk-label { color: var(--red); }
-  .risk-box.ok .risk-label { color: var(--green); }
-  .risk-box.neutral .risk-label { color: var(--blue); }
-  .risk-body { font-size: 11px; color: var(--muted); line-height: 1.6; }
-
-  /* ── LAYERS ── */
-  .layers { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
-
-  .layer {
-    display: grid;
-    grid-template-columns: 140px 1fr auto;
-    gap: 0;
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .layer-lbl {
-    padding: 11px 14px;
-    background: var(--s2);
-    border-right: 1px solid var(--border);
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    display: flex;
-    align-items: center;
-  }
-
-  .panel-p .layer-lbl { color: var(--btcfi); }
-  .panel-a .layer-lbl { color: var(--biz); }
-
-  .layer-body {
-    padding: 10px 14px;
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .layer-body strong { color: var(--text); font-weight: 500; }
-
-  .layer-tag {
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    border-left: 1px solid var(--border);
-  }
-
-  .layer-tag span {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-
-  /* ── PROTOCOL CARDS ── */
-  .proto-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 14px;
-  }
-
-  .proto-card {
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    padding: 14px;
-  }
-
-  .proto-icon { font-size: 20px; margin-bottom: 8px; display: block; }
-  .proto-name { font-weight: 700; font-size: 12px; color: var(--text); margin-bottom: 4px; }
-  .proto-type { font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
-  .panel-p .proto-type { color: var(--btcfi); }
-  .panel-a .proto-type { color: var(--biz); }
-  .proto-desc { font-size: 10px; color: var(--muted); line-height: 1.55; }
-
-  /* ── BIZ MODEL ── */
-  .biz-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 14px;
-  }
-
-  .biz-item {
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    padding: 16px;
-  }
-
-  .biz-icon { font-size: 18px; margin-bottom: 8px; display: block; }
-  .biz-name { font-weight: 700; font-size: 12px; color: var(--text); margin-bottom: 4px; }
-  .biz-desc { font-size: 10px; color: var(--muted); line-height: 1.55; margin-bottom: 8px; }
-  .biz-price { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
-  .panel-p .biz-price { color: var(--btcfi); }
-  .panel-a .biz-price { color: var(--biz); }
-
-  /* ── PIXGO ANALYSIS ── */
-  .pixgo-box {
-    background: var(--s1);
-    border: 1px solid var(--border2);
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 14px;
-  }
-
-  .pixgo-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .pixgo-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--biz);
-  }
-
-  .pixgo-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
-  .pixgo-badge {
-    background: var(--biz-dim);
-    border: 1px solid rgba(245,158,11,0.3);
-    color: var(--biz);
-    font-size: 10px;
-    padding: 4px 10px;
-    border-radius: 100px;
-  }
-
-  .flow-steps {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin: 14px 0;
-    overflow-x: auto;
-  }
-
-  .flow-step {
-    background: var(--s2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 10px;
-    text-align: center;
-    flex-shrink: 0;
-    min-width: 100px;
-  }
-
-  .flow-step strong { display: block; color: var(--text); font-size: 11px; margin-bottom: 2px; }
-  .flow-step span { color: var(--muted); }
-
-  .flow-arrow {
-    color: var(--biz);
-    font-size: 16px;
-    padding: 0 6px;
-    flex-shrink: 0;
-  }
-
-  .kv-table { width: 100%; margin-top: 14px; }
-  .kv-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 7px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 11px;
-    gap: 10px;
-  }
-  .kv-row:last-child { border-bottom: none; }
-  .kv-k { color: var(--muted); }
-  .kv-v { color: var(--text); font-weight: 500; text-align: right; }
-  .kv-v.g { color: var(--green); }
-  .kv-v.r { color: var(--red); }
-  .kv-v.a { color: var(--biz); }
-  .kv-v.p { color: var(--btcfi); }
-
-  /* ── GRAY ZONE ── */
-  .gray-zone {
-    background: rgba(244,63,94,0.06);
-    border: 1px solid rgba(244,63,94,0.2);
-    border-radius: 6px;
-    padding: 16px;
-    margin-top: 14px;
-  }
-
-  .gz-title {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--red);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .gz-item {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 8px;
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.55;
-    align-items: flex-start;
-  }
-
-  .gz-item::before { content: '▸'; color: var(--red); flex-shrink: 0; margin-top: 2px; font-size: 10px; }
-
-  /* ── ACTIONS ── */
-  .actions {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-top: 14px;
-  }
-
-  .action {
-    display: flex;
-    gap: 10px;
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 9px 12px;
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.5;
-    align-items: flex-start;
-  }
-
-  .action-n {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-
-  .panel-p .action-n { color: var(--btcfi); }
-  .panel-a .action-n { color: var(--biz); }
-
-  /* ── INSIGHT BOX ── */
-  .insight {
-    border-radius: 6px;
-    padding: 16px;
-    margin-top: 14px;
-    font-size: 11px;
-    line-height: 1.65;
-    color: var(--text);
-  }
-
-  .panel-p .insight { background: var(--btcfi-dim); border: 1px solid rgba(167,139,250,0.2); }
-  .panel-a .insight { background: var(--biz-dim); border: 1px solid rgba(245,158,11,0.2); }
-
-  .insight strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 5px; }
-  .panel-p .insight strong { color: var(--btcfi); }
-  .panel-a .insight strong { color: var(--biz); }
-
-  /* ── FOOTER ── */
-  footer {
-    padding: 24px 52px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid var(--border);
-    font-size: 10px;
-    color: var(--muted);
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .footer-pills { display: flex; gap: 8px; }
-  .footer-pill {
-    font-size: 10px;
-    padding: 4px 12px;
-    border-radius: 100px;
-    border: 1px solid;
-    letter-spacing: 0.1em;
-  }
-  .footer-pill.p { border-color: rgba(167,139,250,0.3); color: var(--btcfi); }
-  .footer-pill.a { border-color: rgba(245,158,11,0.3); color: var(--biz); }
-
-  @media (max-width: 860px) {
-    .hero, .sec { padding: 28px 20px; }
-    .sec-layout { grid-template-columns: 1fr; }
-    .proto-grid, .biz-grid, .risk-grid { grid-template-columns: 1fr; }
-    .flow-steps { flex-wrap: wrap; }
-    footer { padding: 20px; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTCFi + Bitcoin para Negócios — Análise | Bitcoin Product Lab</title>
+    <link rel="stylesheet" href="../base.css">
+    <style>
+        .page-header {
+            padding: 140px var(--p-page) 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .tab-nav {
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            display: flex;
+            background: var(--s1);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .tab-btn.active {
+            background: var(--s2);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .tab-btn.active.btcfi { color: #a78bfa; }
+        .tab-btn.active.biz { color: #f59e0b; }
+
+        .content-panel {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 var(--p-page) 120px;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        section { margin-bottom: 80px; }
+
+        h2 { font-size: 32px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .card {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .card:hover { background: var(--s2); border-color: var(--accent); }
+
+        .score-box {
+            background: var(--s2);
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .progress-bg { height: 4px; background: var(--border); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 2px; transition: width 1s ease-out; }
+
+        .pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 10px;
+            margin-bottom: 12px;
+            border: 1px solid;
+        }
+
+        @media (max-width: 900px) {
+            .page-header { padding: 100px var(--p-mobile) 40px; }
+            .tab-nav { flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
-<div style="position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(8,9,14,0.92);backdrop-filter:blur(10px);border-bottom:1px solid #1a1d2e;padding:14px 40px;display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:11px;">
-  <a href="../" style="color:#f7931a;text-decoration:none;letter-spacing:0.15em;text-transform:uppercase;">← André₿ Lab</a>
-  <div style="display:flex;gap:24px;">
-    <a href="../bitlegacy/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">BitLegacy</a>
-    <a href="../sovereignfolio/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">SovereignFolio</a>
-    <a href="../btcfi/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">BTCFi</a>
-    <a href="../bizbtc/" style="color:#5a5e72;text-decoration:none;letter-spacing:0.12em;font-size:10px;text-transform:uppercase;">BizBTC</a>
-  </div>
-</div>
-<div style="height:52px"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-pills">
-    <span class="pill p">🔮 BTCFi · DeFi com Bitcoin</span>
-    <span class="pill a">🏪 Bitcoin para Negócios</span>
-  </div>
-  <h1>Dois mercados.<br><span class="p">Uma fronteira.</span> <span class="a">Uma oportunidade.</span></h1>
-  <p class="hero-sub">Análise de duas ideias identificadas pelo consultor: DeFi nativo em Bitcoin (o tema mais polêmico da comunidade) e adoção de Bitcoin por MEIs e autônomos (o mercado mais ignorado).</p>
-  <div class="divider-line"></div>
-</div>
-
-<!-- TAB NAV -->
-<div class="tab-nav">
-  <button class="tab-btn p on" onclick="switchTab('p')">🔮 BTCFi — DeFi com Bitcoin</button>
-  <button class="tab-btn a" onclick="switchTab('a')">🏪 Bitcoin para MEI e Negócios</button>
-</div>
-
-<!-- ══════════════════════════════════════════
-     PANEL P — BTCFi
-════════════════════════════════════════════ -->
-<div class="panel panel-p on" id="panel-p">
-
-  <!-- Intro -->
-  <div class="sec">
-    <div class="sec-layout">
-      <div>
-        <div class="sec-tag">O Contexto</div>
-        <h2>DeFi com Bitcoin: o assunto mais controverso da comunidade.</h2>
-        <p>A maioria dos bitcoiners é cética em relação a DeFi — e com razão. Os riscos de smart contracts, hacks e bugs são reais. <strong>Mas a realidade é que usuários vão para Ethereum, Solana e BNB de qualquer jeito</strong>, porque querem usar seu Bitcoin como colateral para tomar empréstimos, gerar yield ou acessar stablecoins sem vender seus sats.</p>
-        <p>O que está mudando em 2025 é que <strong>camadas nativas ao Bitcoin</strong> — Rootstock, Liquid Network, RGB Protocol, Stacks — estão maduras o suficiente para oferecer DeFi sem sair do ecossistema Bitcoin. O gap de produto é: ninguém explica isso de forma acessível, e não existe uma interface unificada para acessar esse ecossistema.</p>
-
-        <div class="risk-grid">
-          <div class="risk-box warn">
-            <div class="risk-label">⚠ Risco real</div>
-            <div class="risk-body">Smart contract bugs, hacks, liquidação forçada de colateral. A comunidade bitcoiner lembra bem do histórico de DeFi em Ethereum.</div>
-          </div>
-          <div class="risk-box ok">
-            <div class="risk-label">✓ Por que importa</div>
-            <div class="risk-body">Usuários vão fazer DeFi de qualquer forma. Melhor educá-los sobre opções Bitcoin-nativas do que perder esse público para outras redes.</div>
-          </div>
-          <div class="risk-box neutral">
-            <div class="risk-label">📡 O que está surgindo</div>
-            <div class="risk-body">Rootstock reduziu taxas em 60% em 2025. RGB está maduro para stablecoins. Stacks tem +$208M em TVL. Liquid cresce em privacidade.</div>
-          </div>
-          <div class="risk-box neutral">
-            <div class="risk-label">🎯 O gap</div>
-            <div class="risk-body">Não existe um portal educativo + agregador de protocolos BTCFi em português. Quem quer entrar não sabe por onde começar.</div>
-          </div>
+    <nav class="nav-container">
+        <a href="../index.html" class="nav-link" style="font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); text-transform: none; letter-spacing: 0;">André Oliveira</a>
+        <div style="display: flex; gap: 32px;">
+            <a href="../index.html#cases" class="nav-link">Análises</a>
+            <a href="../metodo/index.html" class="nav-link">O Método</a>
+            <a href="../sobre/index.html" class="nav-link">Sobre</a>
+            <a href="https://github.com/sunda290" target="_blank" class="nav-link">GitHub ↗</a>
         </div>
-      </div>
+    </nav>
 
-      <div class="score-card">
-        <div class="sc-title">Score da Oportunidade</div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Tamanho do mercado</span><span class="sc-val">8/10</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:80%; background: linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Dor real e urgente</span><span class="sc-val">7/10</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:70%; background: linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Concorrência PT-BR</span><span class="sc-val">2/10 ← bom</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:20%; background: linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Risco técnico/legal</span><span class="sc-val">8/10 ← alto</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:80%; background: linear-gradient(90deg,#f43f5e,#fb923c)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Potencial educacional</span><span class="sc-val">10/10</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:100%; background: linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div>
-        </div>
-        <div class="sc-verdict">
-          <strong>Produto certo: educação + aggregador</strong><br>
-          Não construa um protocolo DeFi. Construa o guia e a interface que explica e conecta os que já existem.
-        </div>
-      </div>
-    </div>
-  </div>
+    <header class="page-header">
+        <div class="mono" style="margin-bottom: 16px;">Análise Multi-Mercado</div>
+        <h1 style="font-size: 56px; margin-bottom: 24px;">Fronteiras do <span style="color: var(--accent);">Bitcoin</span></h1>
+        <p style="font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text-muted); max-width: 700px; margin: 0 auto;">
+            DeFi Nativo e Pagamentos no Varejo. Duas vertentes da mesma revolução soberana.
+        </p>
+    </header>
 
-  <!-- Protocolos -->
-  <div class="sec">
-    <div class="sec-tag">O Ecossistema BTCFi</div>
-    <h2>Os protocolos que permitem DeFi nativo em Bitcoin.</h2>
-    <p>Cada protocolo tem uma abordagem diferente. Nenhum é perfeito. <strong>O produto de valor não é mais um protocolo — é a camada que explica, compara e agrega o acesso a todos eles.</strong></p>
-
-    <div class="proto-grid">
-      <div class="proto-card">
-        <span class="proto-icon">⚡</span>
-        <div class="proto-name">Rootstock (RSK)</div>
-        <div class="proto-type">Sidechain EVM</div>
-        <div class="proto-desc">Compatível com Ethereum. Permite smart contracts em Solidity. Merge-mining com Bitcoin. Reduziu taxas em 60% em 2025. Tem DEX, lending e stablecoins nativos.</div>
-      </div>
-      <div class="proto-card">
-        <span class="proto-icon">🌊</span>
-        <div class="proto-name">Liquid Network</div>
-        <div class="proto-type">Sidechain Federada</div>
-        <div class="proto-desc">Desenvolvida pela Blockstream. Transações confidenciais. LBTC como Bitcoin sintético. Base da PixGo e outros produtos brasileiros. Velocidade alta, taxas baixas.</div>
-      </div>
-      <div class="proto-card">
-        <span class="proto-icon">🎨</span>
-        <div class="proto-name">RGB Protocol</div>
-        <div class="proto-type">Client-side validation</div>
-        <div class="proto-desc">Smart contracts off-chain ancorados no Bitcoin. USDT já disponível via RGB. Máxima privacidade. Mais complexo para desenvolver. Futuro promissor.</div>
-      </div>
-      <div class="proto-card">
-        <span class="proto-icon">📚</span>
-        <div class="proto-name">Stacks</div>
-        <div class="proto-type">L2 com Bitcoin finality</div>
-        <div class="proto-desc">Smart contracts que liquidam no Bitcoin. Linguagem própria (Clarity). Ecossistema com +$208M TVL. DEX, lending, stablecoins. Nakamoto upgrade 2024.</div>
-      </div>
-      <div class="proto-card">
-        <span class="proto-icon">🔗</span>
-        <div class="proto-name">DLCs</div>
-        <div class="proto-type">Discreet Log Contracts</div>
-        <div class="proto-desc">Contratos condicionais nativos ao Bitcoin usando oráculos. Permite derivativos e apostas sem sair do Bitcoin L1. Ainda muito técnico para o usuário médio.</div>
-      </div>
-      <div class="proto-card">
-        <span class="proto-icon">🏦</span>
-        <div class="proto-name">Zest / Sovryn</div>
-        <div class="proto-type">Lending Protocols</div>
-        <div class="proto-desc">Protocolos de empréstimo com BTC como colateral no Rootstock/Stacks. Permite pegar stablecoin emprestado sem vender Bitcoin. O caso de uso mais procurado.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Conceito de produto -->
-  <div class="sec">
-    <div class="sec-tag">Conceito de Produto</div>
-    <h2>BTCFi Guide — o portal que falta para DeFi Bitcoin em português.</h2>
-    <p>Não é um protocolo, não é uma exchange. É um <strong>portal educativo + aggregador de acesso</strong> que resolve a pergunta: "Quero usar meu Bitcoin para gerar yield sem vender — por onde começo?"</p>
-
-    <div class="layers">
-      <div class="layer">
-        <div class="layer-lbl">Educação</div>
-        <div class="layer-body"><strong>Guia comparativo</strong> de todos os protocolos BTCFi: riscos, TVL, taxas, como acessar. Atualizado. Em português. Sem jargão desnecessário.</div>
-        <div class="layer-tag"><span>conteúdo</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Simulador</div>
-        <div class="layer-body"><strong>Calculadora de yield e colateral:</strong> "Se eu colocar X BTC como colateral, quanto posso pegar em stablecoin? Qual o risco de liquidação?"</div>
-        <div class="layer-tag"><span>ferramenta</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Aggregador</div>
-        <div class="layer-body"><strong>Dashboard de oportunidades BTCFi:</strong> melhores taxas de yield em cada protocolo, APY histórico, TVL em tempo real. Compara sem precisar abrir 6 sites.</div>
-        <div class="layer-tag"><span>dados</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Alertas</div>
-        <div class="layer-body"><strong>Monitoramento de posição:</strong> alerta quando colateral está próximo de liquidação, quando yield muda significativamente, quando novo protocolo surge.</div>
-        <div class="layer-tag"><span>proativo</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Comunidade</div>
-        <div class="layer-body"><strong>Fórum / newsletter</strong> sobre BTCFi em PT-BR. Análises semanais de protocolos, incidents, oportunidades. Monetiza via assinatura premium.</div>
-        <div class="layer-tag"><span>recorrente</span></div>
-      </div>
+    <div class="tab-nav">
+        <button class="tab-btn active btcfi" onclick="switchTab('btcfi')">🔮 BTCFi (DeFi Nativo)</button>
+        <button class="tab-btn biz" onclick="switchTab('biz')">🏪 BizBTC (Negócios)</button>
     </div>
 
-    <div class="biz-grid" style="margin-top:16px">
-      <div class="biz-item">
-        <span class="biz-icon">📰</span>
-        <div class="biz-name">Newsletter Premium</div>
-        <div class="biz-desc">Análise semanal de oportunidades BTCFi, incidents, novos protocolos. Base de assinantes recorrente.</div>
-        <div class="biz-price">R$ 29–79/mês</div>
-      </div>
-      <div class="biz-item">
-        <span class="biz-icon">📊</span>
-        <div class="biz-name">Dashboard Pro</div>
-        <div class="biz-desc">Aggregador de yields, alertas de colateral, histórico de APY por protocolo. API para integradores.</div>
-        <div class="biz-price">R$ 49–149/mês</div>
-      </div>
-      <div class="biz-item">
-        <span class="biz-icon">🎓</span>
-        <div class="biz-name">Curso BTCFi</div>
-        <div class="biz-desc">Do básico ao avançado: como usar Rootstock, Liquid, RGB na prática. Certificado. Ao vivo + gravado.</div>
-        <div class="biz-price">R$ 497–997</div>
-      </div>
-      <div class="biz-item">
-        <span class="biz-icon">🤝</span>
-        <div class="biz-name">Parceria Protocolos</div>
-        <div class="biz-desc">Referral fee dos protocolos que gerarem usuários via plataforma. Modelo de afiliado institucional.</div>
-        <div class="biz-price">0.1–0.5% do TVL</div>
-      </div>
-    </div>
+    <!-- BTCFi Panel -->
+    <main id="btcfi" class="content-panel active">
+        <section>
+            <div class="pill" style="border-color: #a78bfa; color: #a78bfa; background: rgba(167,139,250,0.1);">Protocolo L2 · Sidechains</div>
+            <h2>O Paradoxo do DeFi em Bitcoin</h2>
+            <p>A maioria dos bitcoiners é cética, mas bilhões fluem para redes externas. O BTCFi busca trazer essa utilidade para camadas nativas como Rootstock, Liquid e Stacks.</p>
+            
+            <div class="score-box">
+                <div class="score-row"><span>Tamanho do Mercado</span><span class="mono">8/10</span></div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 80%; background: #a78bfa;"></div></div>
+                <div style="margin-top: 24px; font-size: 13px; color: var(--text-muted);">
+                    <strong>Veredito:</strong> Oportunidade em aggregadores e interfaces educativas, não necessariamente em novos protocolos.
+                </div>
+            </div>
 
-    <div class="actions">
-      <div class="action"><span class="action-n">01</span><span>Começar pelo conteúdo, não pelo software. Escrever os 10 guias comparativos que não existem em PT-BR.</span></div>
-      <div class="action"><span class="action-n">02</span><span>Criar newsletter no Substack ou Ghost. Testar apetite do mercado antes de construir qualquer ferramenta.</span></div>
-      <div class="action"><span class="action-n">03</span><span>Construir o simulador de colateral/yield como primeiro produto técnico. Simples, útil, viral na comunidade.</span></div>
-      <div class="action"><span class="action-n">04</span><span>Integrar com SovereignFolio: usuário vê portfólio → clica num BTC → simulador mostra yield possível.</span></div>
-    </div>
-  </div>
+            <div class="grid-3">
+                <div class="card">
+                    <span class="mono" style="color: #a78bfa;">01. RSK</span>
+                    <h3 style="margin: 8px 0;">Rootstock</h3>
+                    <p style="font-size: 12px; color: var(--text-muted);">Sidechain EVM com merge-mining. A casa do DeFi maduro no Bitcoin.</p>
+                </div>
+                <div class="card">
+                    <span class="mono" style="color: #a78bfa;">02. Stacks</span>
+                    <h3 style="margin: 8px 0;">Stacks L2</h3>
+                    <p style="font-size: 12px; color: var(--text-muted);">Contratos inteligentes com finalização direta na L1 do Bitcoin.</p>
+                </div>
+                <div class="card">
+                    <span class="mono" style="color: #a78bfa;">03. RGB</span>
+                    <h3 style="margin: 8px 0;">RGB Protocol</h3>
+                    <p style="font-size: 12px; color: var(--text-muted);">Client-side validation para máxima privacidade e escalabilidade.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-</div><!-- /panel-p -->
+    <!-- Biz Panel -->
+    <main id="biz" class="content-panel">
+        <section>
+            <div class="pill" style="border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,0.1);">Varejo · MEIs · Pagamentos</div>
+            <h2>BizBTC: Bitcoin no mundo real</h2>
+            <p>15 milhões de MEIs no Brasil. O gap entre o Pix e o Satoshi. Como transformar o Bitcoin em uma ferramenta de fluxo de caixa soberana para o pequeno empreendedor.</p>
+            
+            <div class="score-box" style="border-color: #f59e0b;">
+                <div class="score-row"><span>Dor do Usuário</span><span class="mono">10/10</span></div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 100%; background: #f59e0b;"></div></div>
+                <div style="margin-top: 24px; font-size: 13px; color: var(--text-muted);">
+                    <strong>Aposta:</strong> O Pix é a porta de entrada. A Liquid Network (via PixGo) é o trilho silencioso da soberania.
+                </div>
+            </div>
 
+            <div class="grid-3">
+                <div class="card">
+                    <span class="mono" style="color: #f59e0b;">Visão</span>
+                    <h3 style="margin: 8px 0;">Terminal Soberano</h3>
+                    <p style="font-size: 12px; color: var(--text-muted);">Receba Pix, guarde em DePix (Liquid), gaste como quiser. Sem bancos.</p>
+                </div>
+                <div class="card">
+                    <span class="mono" style="color: #f59e0b;">Gap</span>
+                    <h3 style="margin: 8px 0;">Interface de Gestão</h3>
+                    <p style="font-size: 12px; color: var(--text-muted);">Falta um ERP simples que fale Bitcoin para quem só entende de vender.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-<!-- ══════════════════════════════════════════
-     PANEL A — Bitcoin para Negócios
-════════════════════════════════════════════ -->
-<div class="panel panel-a" id="panel-a">
+    <script>
+        function switchTab(id) {
+            document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
 
-  <!-- Intro -->
-  <div class="sec">
-    <div class="sec-layout">
-      <div>
-        <div class="sec-tag">O Contexto</div>
-        <h2>MEI, autônomo, pequeno negócio: o mercado que Bitcoin ainda não conquistou.</h2>
-        <p>Existem <strong>15+ milhões de MEIs no Brasil</strong>. A maioria usa Pix, boleto e cartão. Bitcoin como meio de pagamento para esse público ainda tem fricção enorme: wallet técnica demais, conversão para BRL complicada, questões fiscais nebulosas.</p>
-        <p>A PixGo é o exemplo mais próximo de uma solução: <strong>cliente paga em Pix → vendedor recebe em DEPIX</strong> (stablecoin 1:1 com Real na Liquid Network). Sem banco, sem KYC, com privacidade. Mas ainda tem fricção técnica, taxas, e uma zona cinzenta jurídica relevante.</p>
-        <p><strong>O produto que falta</strong> é o que resolve toda a jornada: receber, converter, declarar, reinvestir — de forma simples, em português, com orientação jurídica embutida.</p>
-
-        <div class="insight">
-          <strong>💡 Por que agora?</strong>
-          Em 2025, o Pix Automático se tornou obrigatório para instituições financeiras, expandindo ainda mais o ecossistema Pix. A integração entre Pix e redes Bitcoin como Liquid está emergindo exatamente nesse momento de maturidade do mercado brasileiro.
-        </div>
-      </div>
-
-      <div class="score-card">
-        <div class="sc-title">Score da Oportunidade</div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Tamanho do mercado</span><span class="sc-val">10/10</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:100%; background: linear-gradient(90deg,#d97706,#f59e0b)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Dor real e urgente</span><span class="sc-val">9/10</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:90%; background: linear-gradient(90deg,#d97706,#f59e0b)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Solução existente (PixGo)</span><span class="sc-val">5/10</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:50%; background: linear-gradient(90deg,#d97706,#f59e0b)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Gap jurídico</span><span class="sc-val">8/10 ← sério</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:80%; background: linear-gradient(90deg,#f43f5e,#fb923c)"></div></div>
-        </div>
-        <div class="sc-row">
-          <div class="sc-labels"><span class="sc-name">Diferencial PT-BR</span><span class="sc-val">10/10</span></div>
-          <div class="sc-bar"><div class="sc-fill" style="width:100%; background: linear-gradient(90deg,#d97706,#f59e0b)"></div></div>
-        </div>
-        <div class="sc-verdict">
-          <strong>Mercado massivo, solução incompleta</strong><br>
-          PixGo resolve o recebimento. O produto que falta resolve toda a jornada + o lado jurídico.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PixGo Analysis -->
-  <div class="sec">
-    <div class="sec-tag">Análise da PixGo</div>
-    <h2>O que a PixGo resolve — e onde termina.</h2>
-
-    <div class="pixgo-box">
-      <div class="pixgo-header">
-        <div>
-          <div class="pixgo-name">PixGo</div>
-          <div class="pixgo-sub">pixgo.org · Liquid Network · DEPIX stablecoin</div>
-        </div>
-        <span class="pixgo-badge">Produto existente</span>
-      </div>
-
-      <div class="flow-steps">
-        <div class="flow-step"><strong>Cliente</strong><span>paga via Pix</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step"><strong>PLEBANK/Fitbank</strong><span>processa Pix</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step"><strong>Depix.info</strong><span>converte p/ DEPIX</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step"><strong>Liquid Network</strong><span>D+1 settlement</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step"><strong>Vendedor</strong><span>recebe DEPIX</span></div>
-      </div>
-
-      <div class="kv-table">
-        <div class="kv-row"><span class="kv-k">Taxa por transação</span><span class="kv-v a">2% + R$0,50 fixo (Liquid)</span></div>
-        <div class="kv-row"><span class="kv-k">KYC requerido</span><span class="kv-v g">Não — só email/senha</span></div>
-        <div class="kv-row"><span class="kv-k">Privacidade</span><span class="kv-v g">Alta — Liquid Network</span></div>
-        <div class="kv-row"><span class="kv-k">Limite inicial</span><span class="kv-v r">R$ 300/transação (Starter)</span></div>
-        <div class="kv-row"><span class="kv-k">Conversão DEPIX→BRL</span><span class="kv-v">Manual via CryPix/BrSwap</span></div>
-        <div class="kv-row"><span class="kv-k">Wallet necessária</span><span class="kv-v r">SideSwap ou Aqua (técnico)</span></div>
-        <div class="kv-row"><span class="kv-k">Suporte a CNPJ/MEI</span><span class="kv-v g">Sim, aceita PJ</span></div>
-        <div class="kv-row"><span class="kv-k">Declaração IR orientada</span><span class="kv-v r">Nenhuma</span></div>
-      </div>
-    </div>
-
-    <div class="gray-zone">
-      <div class="gz-title">⚠ Zona Cinzenta Jurídica — Identificada pelo consultor</div>
-      <div class="gz-item">Cliente paga em BRL (Pix) mas o vendedor recebe DEPIX — uma stablecoin, não moeda oficial. Essa conversão pode ter implicações tributárias que a PixGo não orienta.</div>
-      <div class="gz-item">Transações recebidas em Bitcoin depois de converter DEPIX precisam ser declaradas separadamente no IR. Muitos usuários não sabem disso.</div>
-      <div class="gz-item">A PixGo é empresa americana (Wyoming). Em caso de disputa, o suporte jurídico do vendedor brasileiro é limitado.</div>
-      <div class="gz-item">Privacidade da Liquid Network é uma faca de dois gumes: protege o usuário, mas pode levantar questões de conformidade com COAF e Receita Federal para volumes maiores.</div>
-    </div>
-  </div>
-
-  <!-- Produto conceito -->
-  <div class="sec">
-    <div class="sec-tag">Conceito de Produto</div>
-    <h2>BizBTC — a plataforma completa para negócios que usam Bitcoin.</h2>
-    <p>Não é concorrente da PixGo — é a camada acima dela (e de outras soluções). Resolve tudo que vem <strong>antes e depois</strong> do recebimento: onboarding, educação, gestão, declaração fiscal e orientação jurídica.</p>
-
-    <div class="layers">
-      <div class="layer">
-        <div class="layer-lbl">Recebimento</div>
-        <div class="layer-body"><strong>Interface simplificada</strong> sobre PixGo/Lightning: gera QR code, recebe em DEPIX ou sats, converte automaticamente para BRL se desejado. Zero jargão técnico.</div>
-        <div class="layer-tag"><span>integração</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Gestão</div>
-        <div class="layer-body"><strong>Dashboard de vendas em Bitcoin:</strong> extrato mensal, comparativo BTC/BRL, métricas de conversão. Exporta para contador. Para MEI e PJ.</div>
-        <div class="layer-tag"><span>financeiro</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Fiscal / IR</div>
-        <div class="layer-body"><strong>Orientação de declaração:</strong> calcula ganho de capital automaticamente, gera relatório por período, orienta sobre DARF e DARFs mensais. Integra com BitIR Brasil.</div>
-        <div class="layer-tag"><span>compliance</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Jurídico</div>
-        <div class="layer-body"><strong>Guia jurídico por atividade:</strong> "Sou MEI de serviços — como declaro Bitcoin recebido?" Parceria com advogados tributaristas. Alerta sobre zonas cinzentas.</div>
-        <div class="layer-tag"><span>orientação</span></div>
-      </div>
-      <div class="layer">
-        <div class="layer-lbl">Educação</div>
-        <div class="layer-body"><strong>Onboarding progressivo:</strong> do "o que é Bitcoin?" ao "como recebo meu primeiro pagamento". Trilha por tipo de negócio (MEI serviços, e-commerce, freelancer).</div>
-        <div class="layer-tag"><span>adoção</span></div>
-      </div>
-    </div>
-
-    <div class="biz-grid" style="margin-top:16px">
-      <div class="biz-item">
-        <span class="biz-icon">🆓</span>
-        <div class="biz-name">Plano Starter</div>
-        <div class="biz-desc">Até 10 transações/mês, QR code, extrato básico, guia de onboarding. Conquista o mercado.</div>
-        <div class="biz-price">Gratuito</div>
-      </div>
-      <div class="biz-item">
-        <span class="biz-icon">📈</span>
-        <div class="biz-name">Plano Pro</div>
-        <div class="biz-desc">Transações ilimitadas, dashboard completo, relatório fiscal, exportação para contador, suporte prioritário.</div>
-        <div class="biz-price">R$ 49–99/mês</div>
-      </div>
-      <div class="biz-item">
-        <span class="biz-icon">⚖️</span>
-        <div class="biz-name">Pacote Jurídico</div>
-        <div class="biz-desc">Consulta com advogado tributarista especializado em cripto. Orientação personalizada por tipo de negócio.</div>
-        <div class="biz-price">R$ 200–500/consulta</div>
-      </div>
-      <div class="biz-item">
-        <span class="biz-icon">🏢</span>
-        <div class="biz-name">B2B Contadores</div>
-        <div class="biz-desc">Dashboard multi-cliente para escritórios contábeis que têm clientes usando cripto. Badge "Bitcoin Ready".</div>
-        <div class="biz-price">R$ 299–799/mês</div>
-      </div>
-    </div>
-
-    <div class="actions" style="margin-top:16px">
-      <div class="action"><span class="action-n">01</span><span>Conversar com os desenvolvedores da PixGo (o amigo conhece) — potencial de parceria, não competição.</span></div>
-      <div class="action"><span class="action-n">02</span><span>Criar o "Guia Fiscal: Bitcoin para MEI" — o documento que não existe. Viral no nicho, gera leads naturalmente.</span></div>
-      <div class="action"><span class="action-n">03</span><span>Mapear 3 advogados tributaristas com conhecimento em cripto para compor a rede do produto jurídico.</span></div>
-      <div class="action"><span class="action-n">04</span><span>Sinergia direta com BitLegacy: empresário que usa Bitcoin no negócio também precisa de plano de herança.</span></div>
-    </div>
-  </div>
-
-</div><!-- /panel-a -->
-
-<footer>
-  <span>Análise gerada com base em pesquisa de mercado · Abril 2026</span>
-  <div class="footer-pills">
-    <span class="footer-pill p">BTCFi Guide</span>
-    <span class="footer-pill a">BizBTC</span>
-  </div>
-</footer>
-
-<script>
-function switchTab(tab) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
-  document.getElementById('panel-' + tab).classList.add('on');
-  document.querySelectorAll('.tab-btn.' + tab).forEach(b => b.classList.add('on'));
-}
-</script>
+    <footer style="padding: 80px var(--p-page); border-top: 1px solid var(--border); text-align: center;">
+        <p style="color: var(--text-muted); font-size: 12px;">© 2026 Bitcoin Product Lab · Multi-Analysis</p>
+    </footer>
 
 </body>
 </html>

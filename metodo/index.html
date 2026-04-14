@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ideias & Oportunidades | Bitcoin Product Lab</title>
+    <link rel="stylesheet" href="../base.css">
+    <style>
+        .page-header {
+            padding: 140px var(--p-page) 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--p-page) 120px;
+        }
+
+        .sidebar-nav {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            text-align: left;
+            font-size: 13px;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid transparent;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            color: var(--white);
+            padding-left: 8px;
+            border-bottom-color: var(--accent);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .idea-card {
+            background: var(--s1);
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .idea-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            background: var(--s2);
+        }
+
+        .card-tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .solution-box {
+            background: var(--s2);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 2px solid var(--accent);
+            margin-top: auto;
+        }
+
+        .complexity-dots {
+            display: flex;
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .dot.active { background: var(--accent); }
+
+        @media (max-width: 900px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .sidebar-nav { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-container">
+        <a href="../index.html" class="nav-link" style="font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); text-transform: none; letter-spacing: 0;">André Oliveira</a>
+        <div style="display: flex; gap: 32px;">
+            <a href="../index.html#cases" class="nav-link">Análises</a>
+            <a href="../metodo/index.html" class="nav-link active">O Método</a>
+            <a href="../sobre/index.html" class="nav-link">Sobre</a>
+            <a href="https://github.com/sunda290" target="_blank" class="nav-link">GitHub ↗</a>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="mono" style="margin-bottom: 16px;">Laboratório de Ideias</div>
+        <h1 style="font-size: 64px; margin-bottom: 24px;">Problemas Reais <br><span style="color: var(--accent);">→ Oportunidades</span></h1>
+        <p style="font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text-muted); max-width: 800px;">
+            Uma curadoria de dores de mercado mapeadas e possíveis soluções tecnológicas com foco em SOlo-SaaS e ferramentas de produtividade.
+        </p>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar-nav">
+            <div class="mono" style="font-size: 10px; margin-bottom: 24px; color: var(--text-muted);">Filtrar por Categoria</div>
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filter('all')">Todos os Insights</button>
+                <button class="filter-btn" onclick="filter('tempo')">⏱ Tempo & Gestão</button>
+                <button class="filter-btn" onclick="filter('financeiro')">💰 Financeiro</button>
+                <button class="filter-btn" onclick="filter('comunicacao')">💬 Comunicação</button>
+                <button class="filter-btn" onclick="filter('conhecimento')">🧠 Conhecimento</button>
+                <button class="filter-btn" onclick="filter('operacional')">⚙️ Operacional</button>
+                <button class="filter-btn" onclick="filter('carreira')">🚀 Carreira</button>
+            </div>
+            
+            <div class="solution-box" style="border: 1px solid var(--border); background: var(--s1); margin-top: 60px;">
+                <div class="mono" style="font-size: 10px; color: var(--accent); margin-bottom: 12px;">André's Stack</div>
+                <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+                    Node.js · PostgreSQL · Next.js · Claude AI · Stripe
+                </p>
+            </div>
+        </aside>
+
+        <main class="cards-grid" id="cards-grid">
+            <!-- Rendered by JS -->
+        </main>
+    </div>
+
+    <script>
+        const data = [
+            {
+                category: 'tempo',
+                categoryLabel: 'Gestão de Tempo',
+                pain: 'Reuniões que não terminam e ninguém sabe o que foi decidido',
+                desc: 'Profissionais perdem horas em reuniões sem ata ou próximos passos claros.',
+                appName: 'MeetLog AI',
+                appDesc: 'Extrai decisões e tarefas via IA automaticamente.',
+                difficulty: 2
+            },
+            {
+                category: 'financeiro',
+                categoryLabel: 'Financeiro',
+                pain: 'Freelancers que não sabem precificar corretamente',
+                desc: 'A maioria cobra pelo feeling, sem considerar custos Reais ou margem.',
+                appName: 'PriceRight',
+                appDesc: 'Calculadora de precificação profissional baseada em dados.',
+                difficulty: 2
+            },
+            {
+                category: 'comunicacao',
+                categoryLabel: 'Comunicação',
+                pain: 'Inbox infinito: emails demais, foco de menos',
+                desc: 'Triagem e priorização manual consomem o melhor do dia produtivo.',
+                appName: 'InboxZero AI',
+                appDesc: 'Classificação inteligente e rascunhos automáticos.',
+                difficulty: 3
+            },
+            {
+                category: 'conhecimento',
+                categoryLabel: 'Gestão do Conhecimento',
+                pain: 'Documentação que se perde no tempo',
+                desc: 'Quando profissionais saem, levam o know-how embora com eles.',
+                appName: 'KnowBase',
+                appDesc: 'Wiki corporativa orgânica e auto-organizada.',
+                difficulty: 3
+            },
+            {
+                category: 'operacional',
+                categoryLabel: 'Operacional',
+                pain: 'Checklists manuais e falhos',
+                desc: 'Processos críticos feitos em papel ou Excel sem rastreabilidade.',
+                appName: 'OpsFlow',
+                appDesc: 'Protocolos digitais com assinatura e auditoria.',
+                difficulty: 2
+            },
+            {
+                category: 'carreira',
+                categoryLabel: 'Carreira',
+                pain: 'Filtros ATS que barram talentos',
+                desc: 'Currículos bons são rejeitados por falta de palavras-chave.',
+                appName: 'CVPass',
+                appDesc: 'Otimizador de currículos para triagem automática.',
+                difficulty: 2
+            }
+        ];
+
+        function renderCards(cat = 'all') {
+            const grid = document.getElementById('cards-grid');
+            const filtered = cat === 'all' ? data : data.filter(d => d.category === cat);
+            
+            grid.innerHTML = filtered.map(d => `
+                <div class="idea-card">
+                    <span class="card-tag mono">${d.categoryLabel}</span>
+                    <h3 class="card-title">${d.pain}</h3>
+                    <p style="font-size: 14px; color: var(--text-muted);">${d.desc}</p>
+                    
+                    <div class="solution-box">
+                        <strong class="mono" style="font-size: 10px; color: var(--white); display: block; margin-bottom: 4px;">Solução Proposta</strong>
+                        <div style="font-weight: 600; margin-bottom: 4px; color: var(--accent);">${d.appName}</div>
+                        <p style="font-size: 12px; color: var(--text-muted);">${d.appDesc}</p>
+                    </div>
+
+                    <div class="complexity-dots">
+                        ${Array(4).fill().map((_, i) => `<div class="dot ${i < d.difficulty ? 'active' : ''}"></div>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filter(cat) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCards(cat);
+        }
+
+        renderCards();
+    </script>
+
+    <footer style="padding: 80px var(--p-page); border-top: 1px solid var(--border); text-align: center;">
+        <p style="color: var(--text-muted); font-size: 12px;">© 2026 Bitcoin Product Lab · Research & Analysis</p>
+    </footer>
+
+</body>
+</html>

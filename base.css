@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+:root {
+    /* Colors */
+    --bg: #030408;
+    --s1: #090b11;
+    --s2: #11141d;
+    --accent: #f7931a; /* Bitcoin Orange */
+    --accent-dim: rgba(247, 147, 26, 0.08);
+    --border: rgba(255, 255, 255, 0.05);
+    --border-hover: rgba(255, 255, 255, 0.12);
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --white: #ffffff;
+    
+    /* Spacing */
+    --p-page: 48px;
+    --p-mobile: 24px;
+    
+    /* Shadows & Effects */
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --glass: backdrop-filter: blur(12px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── TACTILE GRAIN EFFECT ── */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+/* ── SHARED NAVBAR ── */
+.nav-container {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 24px var(--p-page);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(3, 4, 8, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--accent);
+}
+
+/* ── BENTO GRID ── */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.bento-card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.bento-card:hover {
+    border-color: var(--border-hover);
+    background: var(--s2);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+}
+
+.bento-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.bento-card:hover::before {
+    opacity: 0.5;
+}
+
+/* ── UTILITIES ── */
+.span-6 { grid-column: span 6; }
+.span-4 { grid-column: span 4; }
+.span-8 { grid-column: span 8; }
+.span-12 { grid-column: span 12; }
+
+@media (max-width: 900px) {
+    .nav-container { padding: 16px var(--p-mobile); }
+    .bento-grid { grid-template-columns: 1fr; }
+    .span-6, .span-4, .span-8, .span-12 { grid-column: span 1; }
+}
